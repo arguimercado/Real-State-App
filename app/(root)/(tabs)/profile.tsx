@@ -45,7 +45,6 @@ const Profile = () => {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerClassName={"pb-32 px-7"}
-
             >
                 <View className={"flex flex-row items-center justify-between mt-5"}>
                     <Text className={"text-xl font-rubik-bold"}>Profile</Text>
