@@ -20,6 +20,7 @@ const TabsLayout = () => {
         <Tabs
             screenOptions={{
                 tabBarShowLabel: false,
+                headerShown: false,
                 tabBarStyle: {
                     backgroundColor: "white",
                     position: "absolute",
@@ -40,11 +41,12 @@ const TabsLayout = () => {
             />
             <Tabs.Screen
                 name="explore"
+
                 options={{
                     title: "Explore",
                     tabBarIcon: ({color, size,focused}) => (
                         <TabIcon focused={focused} size={size} color={color} icon={icons.search} title={"Explore"}/>
-                    )
+                    ),
                 }}
             />
             <Tabs.Screen
