@@ -16,13 +16,13 @@ client
     .setProject(config.projectId!)
     .setPlatform(config.platform!)
 
-export const avatar = new Avatar(client);
+export const avatar = new Avatars(client);
 export const account = new Account(client);
 
 export async function login() {
     try {
         const redirectUri = Linking.createURL("/");
-        const response = await account.createOAuth2Token(OAuthProvider.Google, redirectUri);
+        const response = account.createOAuth2Token(OAuthProvider.Google, redirectUri);
 
         if(!response) throw new Error("Failed to login");
 
@@ -53,7 +53,7 @@ export async function login() {
 
 export async function logout() {
     try {
-        await account.deleteSessions("current");
+        await account.deleteSessions();
         return true;
     }catch(error) {
         console.log(error);
@@ -61,7 +61,7 @@ export async function logout() {
     }
 }
 
-export async function getUser() {
+export async function getCurrentUser() {
     try{
         const response = await account.get();
 
