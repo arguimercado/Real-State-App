@@ -1,7 +1,7 @@
-
 import * as Linking from "expo-linking";
-import {OAuthProvider, Client, Avatars, Account, Databases} from "react-native-appwrite";
+import {OAuthProvider, Client, Avatars, Account, Databases, Query} from "react-native-appwrite";
 import {openAuthSessionAsync} from "expo-web-browser";
+
 export const config = {
     platform: "com.myapp.restate",
     endpoint: process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT,
@@ -30,25 +30,25 @@ export async function login() {
         const redirectUri = Linking.createURL("/");
         const response = account.createOAuth2Token(OAuthProvider.Google, redirectUri);
 
-        if(!response) throw new Error("Failed to login");
+        if (!response) throw new Error("Failed to login");
 
         const browserResult = await openAuthSessionAsync(
             response.toString(),
             redirectUri
         )
 
-        if(browserResult.type !== "success")
+        if (browserResult.type !== "success")
             throw new Error("Failed to login");
 
         const url = new URL(browserResult.url);
         const secret = url.searchParams.get("secret")?.toString();
         const userId = url.searchParams.get("userId")?.toString();
 
-        if(!secret || !userId) throw new Error("Failed to login");
+        if (!secret || !userId) throw new Error("Failed to login");
 
         const session = await account.createSession(userId, secret);
 
-        if(!session) throw new Error("Failed to create session");
+        if (!session) throw new Error("Failed to create session");
 
         return true;
     } catch (e) {
@@ -61,17 +61,17 @@ export async function logout() {
     try {
         await account.deleteSessions();
         return true;
-    }catch(error) {
+    } catch (error) {
         console.log(error);
         return false;
     }
 }
 
 export async function getCurrentUser() {
-    try{
+    try {
         const response = await account.get();
 
-        if(response.$id) {
+        if (response.$id) {
             const userAvatar = avatar.getInitials(response.name);
             return {
                 ...response,
@@ -80,8 +80,62 @@ export async function getCurrentUser() {
         }
 
 
-    }catch(error) {
+    } catch (error) {
         console.log(error);
         return null;
+    }
+}
+
+export async function getLatestProperties() {
+    try {
+        const results = await databases.listDocuments(
+            config.databaseId!,
+            config.propertiesCollectionId!,
+            [Query.orderAsc('$createdAt'), Query.limit(5)]
+        );
+
+        return results.documents;
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+}
+
+export async function getProperties({filter, query, limit}: {
+    filter: string,
+    query: string,
+    limit: number
+}) {
+
+    try {
+        console.log("query", query);
+       const buildQuery = [Query.orderDesc('$createdAt')];
+       if(filter && filter !== 'All')
+           buildQuery.push(Query.equal('type', filter));
+
+       if(query) {
+           buildQuery.push(
+               Query.or([
+                   Query.search("name", query),
+                   Query.search("address", query),
+                   Query.search("type", query),
+               ])
+           );
+
+           console.log(buildQuery)
+       }
+
+       if(limit)
+              buildQuery.push(Query.limit(limit));
+
+        const results = await databases.listDocuments(
+            config.databaseId!,
+            config.propertiesCollectionId!,
+            buildQuery
+        );
+        return results.documents;
+    } catch (error) {
+        console.log(error);
+        return [];
     }
 }
