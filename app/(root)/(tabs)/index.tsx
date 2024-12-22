@@ -1,4 +1,4 @@
-import {Text, View, Image, TouchableOpacity, ScrollView, FlatList} from "react-native";
+import {Text, View, Image, TouchableOpacity, ScrollView, FlatList, Button} from "react-native";
 import {Link} from "expo-router";
 import {SafeAreaView} from "react-native-safe-area-context";
 import images from "@/constants/images";
@@ -10,13 +10,16 @@ import SummaryHeader from "@/components/SummaryHeader";
 import Filters from "@/components/Filters";
 import TopBar from "@/components/TopBar";
 import useGlobalContext from "@/lib/global-provider";
+import seed from "@/lib/persistence/seed";
 
 
 export default function Index() {
 
 
+
     return (
         <SafeAreaView className={"bg-light-900 h-full"}>
+            <Button title={"Seed"} onPress={seed}/>
             <FlatList
                 contentContainerClassName={"pb-32"}
                 columnWrapperClassName={"flex gap-5 px-5"}
