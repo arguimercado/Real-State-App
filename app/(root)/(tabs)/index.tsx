@@ -1,27 +1,39 @@
-import { Text, View,Image } from "react-native";
-import { Link } from "expo-router";
+import {Text, View, Image, TouchableOpacity, ScrollView} from "react-native";
+import {Link} from "expo-router";
 import {SafeAreaView} from "react-native-safe-area-context";
 import images from "@/constants/images";
 import React from "react";
 import icons from "@/constants/icons";
 import Search from "@/components/Search";
+import {Card, FeaturedCard} from "@/components/Cards";
+import SummaryHeader from "@/components/SummaryHeader";
+import Filters from "@/components/Filters";
+import TopBar from "@/components/TopBar";
+
 
 export default function Index() {
-  return (
-      <SafeAreaView className={"bg-white h-full"}>
-          <View className={"px-5"}>
-              <View className={"flex flex-row items-center justify-between mt-5"}>
-                <View className={"flex flex-row items-center"}>
-                    <Image source={images.avatar} className={"size-12 rounded-full"} resizeMode="contain"/>
-                    <View className={"flex flex-col items-start ml-2 justify-center"}>
-                        <Text className={"text-xs font-rubik text-black-100"}>Good Morning</Text>
-                        <Text className={"text-base font-rubik-medium text-black-300"}>Arnold</Text>
+
+    return (
+        <SafeAreaView className={"bg-light-900 h-full"}>
+            <TopBar />
+            <View className={"px-5"}>
+                <Search/>
+                <ScrollView>
+                    <SummaryHeader header="Featured" linkTitle="See All"/>
+                    <View className={"flex flex-row gap-5 mt-5"}>
+                        <FeaturedCard/>
+                        <FeaturedCard/>
+                        <FeaturedCard/>
                     </View>
-                </View>
-                <Image source={icons.bell} className={"size-6"} />
-              </View>
-          </View>
-          <Search/>
-      </SafeAreaView>
-  );
+                    <SummaryHeader header="Our Recommendation" linkTitle="See All"/>
+                    <Filters />
+                    <View className={"flex flex-row gap-5 mt-5"}>
+                        <Card/>
+                        <Card/>
+                    </View>
+                </ScrollView>
+
+            </View>
+        </SafeAreaView>
+    );
 }

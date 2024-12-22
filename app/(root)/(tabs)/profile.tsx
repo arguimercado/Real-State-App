@@ -52,7 +52,7 @@ const Profile = () => {
                 </View>
                 <View className={"flex flex-row items-center justify-center mt-5"}>
                     <View className={"flex flex-col items-center relative mt-5"}>
-                        <Image source={{uri: user?.avatar}} className={"size-44 relative rounded-full"} resizeMode="contain"/>
+                        <Image source={{uri: user?.avatar}} className={"size-44 relative rounded-lg"} style={{borderRadius: "50%"}}  resizeMode="contain"/>
                         <TouchableOpacity className={"absolute bottom-11 right-2"}>
                             <Image source={icons.edit} className={"size-9"}/>
                         </TouchableOpacity>
